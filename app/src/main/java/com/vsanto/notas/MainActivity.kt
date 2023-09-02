@@ -2,22 +2,31 @@ package com.vsanto.notas
 
 import android.app.ActionBar
 import android.app.Dialog
+import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
-import android.view.Window
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-
+import com.vsanto.notas.list.ListActivity
+import com.vsanto.notas.text.TextActivity
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
 
     private val notes = mutableListOf(
-        Note("Titulo texto", Type.Text),
-        Note("Titulo lista", Type.List)
+        Note("Titulo texto", Type.Text, Calendar.getInstance().time, Calendar.getInstance().time),
+        Note("Titulo lista", Type.List, Calendar.getInstance().time, Calendar.getInstance().time)
     )
+
+    companion object {
+        const val NOTE_KEY = "NOTE"
+    }
+
+    private lateinit var toolbar: Toolbar
 
     private lateinit var rvNotes: RecyclerView
     private lateinit var noteAdapter: NoteAdapter
@@ -36,6 +45,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initComponents() {
+        toolbar = findViewById(R.id.toolbar)
+
         rvNotes = findViewById(R.id.rvNotes)
         fabAdd = findViewById(R.id.fabAdd)
     }
@@ -45,9 +56,14 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        noteAdapter = NoteAdapter(notes)
+        noteAdapter = NoteAdapter(notes) { position -> onNoteSelected(position) }
         rvNotes.layoutManager = LinearLayoutManager(this)
         rvNotes.adapter = noteAdapter
+    }
+
+    private fun initToolbar() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.title = "Notas"
     }
 
     private fun showCreateNoteDialog() {
@@ -69,7 +85,22 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNote(type: Type) {
-        notes.add(Note("Nuevo", type))
+        notes.add(Note("Nuevo", type, Calendar.getInstance().time, Calendar.getInstance().time))
         noteAdapter.notifyDataSetChanged()
     }
+
+    private fun onNoteSelected(position: Int) {
+        val note = notes[position]
+        when (note.type) {
+            Type.List -> navigateToNote(note, ListActivity::class.java)
+            Type.Text -> navigateToNote(note, TextActivity::class.java)
+        }
+    }
+
+    private fun navigateToNote(note: Note, noteClass: Class<*>) {
+        val intent = Intent(this, noteClass)
+        intent.putExtra(NOTE_KEY, note)
+        startActivity(intent)
+    }
+
 }

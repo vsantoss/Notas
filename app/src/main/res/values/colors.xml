@@ -7,4 +7,13 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+
+    <color name="app_background">#FFBB86FC</color>
+    <color name="note_item_background">#FF6200EE</color>
+    <color name="add_button_background">#FF6200EE</color>
+    <color name="dialog_background">#FF3700B3</color>
+    <color name="dialog_background2">#FF6200EE</color>
+
+    <!-- List -->
+    <color name="list_item_checkbox">#FF3700B3</color>
 </resources>

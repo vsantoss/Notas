@@ -1,6 +1,8 @@
 package com.vsanto.notas
 
-sealed class Type {
-    object Text: Type()
-    object List: Type()
+import java.io.Serializable
+
+sealed class Type : Serializable {
+    object Text : Type()
+    object List : Type()
 }

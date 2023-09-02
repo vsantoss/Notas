@@ -4,7 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_gravity="bottom"
-    android:background="@color/purple_700"
+    android:background="@color/dialog_background"
     android:padding="20dp">
 
     <TextView
@@ -25,7 +25,7 @@
         android:layout_width="0dp"
         android:layout_height="75dp"
         android:layout_marginEnd="15dp"
-        android:backgroundTint="@color/purple_500"
+        android:backgroundTint="@color/dialog_background2"
         app:cardCornerRadius="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
