@@ -6,11 +6,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
 import androidx.appcompat.app.AppCompatActivity
-import androidx.appcompat.widget.Toolbar
 import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.vsanto.notas.databinding.ActivityMainBinding
 import com.vsanto.notas.list.ListActivity
 import com.vsanto.notas.text.TextActivity
 import java.util.Calendar
@@ -26,43 +24,33 @@ class MainActivity : AppCompatActivity() {
         const val NOTE_KEY = "NOTE"
     }
 
-    private lateinit var toolbar: Toolbar
+    private lateinit var binding: ActivityMainBinding
 
-    private lateinit var rvNotes: RecyclerView
     private lateinit var noteAdapter: NoteAdapter
 
     private lateinit var cvCreateList: CardView
     private lateinit var cvCreateTxt: CardView
 
-    private lateinit var fabAdd: FloatingActionButton
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        initComponents()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         initListeners()
         initUI()
     }
 
-    private fun initComponents() {
-        toolbar = findViewById(R.id.toolbar)
-
-        rvNotes = findViewById(R.id.rvNotes)
-        fabAdd = findViewById(R.id.fabAdd)
-    }
-
     private fun initListeners() {
-        fabAdd.setOnClickListener { showCreateNoteDialog() }
+        binding.fabAdd.setOnClickListener { showCreateNoteDialog() }
     }
 
     private fun initUI() {
         noteAdapter = NoteAdapter(notes) { position -> onNoteSelected(position) }
-        rvNotes.layoutManager = LinearLayoutManager(this)
-        rvNotes.adapter = noteAdapter
+        binding.rvNotes.layoutManager = LinearLayoutManager(this)
+        binding.rvNotes.adapter = noteAdapter
     }
 
     private fun initToolbar() {
-        setSupportActionBar(toolbar)
+        setSupportActionBar(binding.toolbar)
         supportActionBar?.title = "Notas"
     }
 
@@ -77,8 +65,7 @@ class MainActivity : AppCompatActivity() {
 
         dialog.window?.setGravity(Gravity.BOTTOM)
         dialog.window?.setLayout(
-            ActionBar.LayoutParams.MATCH_PARENT,
-            ActionBar.LayoutParams.WRAP_CONTENT
+            ActionBar.LayoutParams.MATCH_PARENT, ActionBar.LayoutParams.WRAP_CONTENT
         )
 
         dialog.show()
