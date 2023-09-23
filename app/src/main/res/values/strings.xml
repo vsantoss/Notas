@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Notas</string>
     <string name="add_button">Botón añadir</string>
+    <string name="settings">Ajustes</string>
+    <string name="search">Buscar</string>
     <string name="title">Notas</string>
     <string name="create">Crear</string>
     <string name="txt">Texto</string>

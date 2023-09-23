@@ -19,4 +19,9 @@ class NoteAdapter(var notes: List<Note>, private val onNoteSelected: (Int) -> Un
 
     override fun getItemCount() = notes.size
 
+    fun updateNotes(notes: List<Note>) {
+        this.notes = notes
+        notifyDataSetChanged()
+    }
+
 }

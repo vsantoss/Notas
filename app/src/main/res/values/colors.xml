@@ -8,11 +8,16 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
+
     <color name="app_background">#FFBB86FC</color>
     <color name="note_item_background">#FF6200EE</color>
     <color name="add_button_background">#FF6200EE</color>
     <color name="dialog_background">#FF3700B3</color>
     <color name="dialog_background2">#FF6200EE</color>
+
+    <!-- Action bar -->
+    <color name="bar_background">#FF6200EE</color>
+    <color name="bar_content">#FFFFFFFF</color>
 
     <!-- List -->
     <color name="list_item_checkbox">#FF3700B3</color>

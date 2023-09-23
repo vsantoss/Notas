@@ -5,19 +5,31 @@ import android.app.Dialog
 import android.content.Intent
 import android.os.Bundle
 import android.view.Gravity
+import android.view.Menu
 import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.vsanto.notas.databinding.ActivityMainBinding
 import com.vsanto.notas.list.ListActivity
 import com.vsanto.notas.text.TextActivity
 import java.util.Calendar
 
+
 class MainActivity : AppCompatActivity() {
 
     private val notes = mutableListOf(
-        Note("Titulo texto", Type.Text, Calendar.getInstance().time, Calendar.getInstance().time),
-        Note("Titulo lista", Type.List, Calendar.getInstance().time, Calendar.getInstance().time)
+        Note(
+            "Titulo texto",
+            Type.Text,
+            Calendar.getInstance().time,
+            Calendar.getInstance().time
+        ), Note(
+            "Titulo lista",
+            Type.List,
+            Calendar.getInstance().time,
+            Calendar.getInstance().time,
+        )
     )
 
     companion object {
@@ -35,8 +47,21 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.etFilter.addTextChangedListener { filter ->
+            val notesFiltered = notes.filter { note ->
+                note.title.lowercase().contains(filter.toString().lowercase())
+            }
+            noteAdapter.updateNotes(notesFiltered)
+        }
+
         initListeners()
         initUI()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
     }
 
     private fun initListeners() {
@@ -44,14 +69,9 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun initUI() {
-        noteAdapter = NoteAdapter(notes) { position -> onNoteSelected(position) }
+        noteAdapter = NoteAdapter(notes, onNoteSelected = { position -> onNoteSelected(position) })
         binding.rvNotes.layoutManager = LinearLayoutManager(this)
         binding.rvNotes.adapter = noteAdapter
-    }
-
-    private fun initToolbar() {
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.title = "Notas"
     }
 
     private fun showCreateNoteDialog() {
@@ -72,19 +92,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun createNote(type: Type) {
-        notes.add(Note("Nuevo", type, Calendar.getInstance().time, Calendar.getInstance().time))
+        val note =
+            Note("Nuevo", type, Calendar.getInstance().time, Calendar.getInstance().time)
+        notes.add(note)
         noteAdapter.notifyDataSetChanged()
+
+        navigateToNote(note)
     }
 
     private fun onNoteSelected(position: Int) {
         val note = notes[position]
-        when (note.type) {
-            Type.List -> navigateToNote(note, ListActivity::class.java)
-            Type.Text -> navigateToNote(note, TextActivity::class.java)
-        }
+        navigateToNote(note)
     }
 
-    private fun navigateToNote(note: Note, noteClass: Class<*>) {
+    private fun navigateToNote(note: Note) {
+        val noteClass = when (note.type) {
+            Type.List -> ListActivity::class.java
+            Type.Text -> TextActivity::class.java
+        }
+
         val intent = Intent(this, noteClass)
         intent.putExtra(NOTE_KEY, note)
         startActivity(intent)

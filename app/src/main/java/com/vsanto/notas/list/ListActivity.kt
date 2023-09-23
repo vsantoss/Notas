@@ -39,7 +39,12 @@ class ListActivity : AppCompatActivity() {
     private fun initUI() {
         binding.etTitle.setText(note.title)
 
-        itemAdapter = ItemAdapter(items, { pos -> onItemSelected(pos) }, { pos -> deleteItem(pos) })
+        itemAdapter = ItemAdapter(
+            items,
+            onItemSelected = { pos -> onItemSelected(pos) },
+            onItemDeleted = { pos -> deleteItem(pos) }
+        )
+
         binding.rvItems.layoutManager = LinearLayoutManager(this)
         binding.rvItems.adapter = itemAdapter
     }
@@ -52,7 +57,7 @@ class ListActivity : AppCompatActivity() {
 
     private fun deleteItem(position: Int) {
         items.removeAt(position)
-        itemAdapter.notifyDataSetChanged()
+        itemAdapter.notifyItemRemoved(position)
     }
 
     private fun onItemSelected(position: Int) {
